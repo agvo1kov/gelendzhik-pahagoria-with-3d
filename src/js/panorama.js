@@ -99,21 +99,25 @@ animate();
 
 // } );
 
+var loadedModelsCount = 0;
+
 var mitridat = null;
 var mtlLoader = new THREE.MTLLoader();
 mtlLoader.setPath( "../../models/mitridat/" );
 mtlLoader.load( 'Mitridat.mtl', function( materials ) {
 	materials.preload();
 	var objLoader = new THREE.OBJLoader();
-	objLoader.setMaterials( materials );
-	objLoader.setPath( "../../models/mitridat/" );
-	objLoader.load( 'Mitridat.obj', function ( object ) {
-	mitridat = object;
-	mitridat.position.x = 18;
-	mitridat.position.y = -2.9;
-	mitridat.position.z = 2.9;
-	mitridat.rotation.y = -1.2;
-	// scene.add( object );
+		loadedModelsCount += 1;
+		objLoader.setMaterials( materials );
+		objLoader.setPath( "../../models/mitridat/" );
+		objLoader.load( 'Mitridat.obj', function ( object ) {
+		mitridat = object;
+		mitridat.position.x = 18;
+		mitridat.position.y = -2.9;
+		mitridat.position.z = 2.9;
+		mitridat.rotation.y = -1.2;
+		// scene.add( mitridat );
+		// scene.remove( mitridat );
 	} );
 } );
 
@@ -126,13 +130,15 @@ mtlLoader.load( 'klinopis.mtl', function( materials ) {
 	objLoader.setMaterials( materials );
 	objLoader.setPath( "../../models/klinopis/" );
 	objLoader.load( 'klinopis.obj', function ( object ) {
-	klinopis = object;
-	klinopis.position.x = 0;
-	klinopis.position.y = 0;
-	klinopis.position.z = 0;
-	klinopis.rotation.y = 3;
-	klinopis.name = 'klinopis';
-	// scene.add( klinopis );
+		loadedModelsCount += 1;
+		klinopis = object;
+		klinopis.position.x = 0;
+		klinopis.position.y = 0;
+		klinopis.position.z = 0;
+		klinopis.rotation.y = 3;
+		klinopis.name = 'klinopis';
+		// scene.add( klinopis );
+		// scene.remove( klinopis );
 	} );
 } );
 
@@ -145,15 +151,40 @@ mtlLoader.load( 'ship200k_1.mtl', function( materials ) {
 	objLoader.setMaterials( materials );
 	objLoader.setPath( "../../models/ship/" );
 	objLoader.load( 'ship200k_1.obj', function ( object ) {
-	ship = object;
-	ship.position.x = 0;
-	ship.position.y = 0;
-	ship.position.z = 0;
-	ship.rotation.y = -1.3;
-	ship.rotation.z = 0.5;
-	ship.rotation.x = 0.6;
-	ship.name = 'ship';
-	// scene.add( klinopis );
+		loadedModelsCount += 1;
+		ship = object;
+		ship.position.x = 0;
+		ship.position.y = 0;
+		ship.position.z = 0;
+		ship.rotation.y = -1.3;
+		ship.rotation.z = 0.5;
+		ship.rotation.x = 0.6;
+		ship.name = 'ship';
+		// scene.add( ship );
+		// scene.remove( ship );
+	} );
+} );
+
+var taran = null;
+var mtlLoader = new THREE.MTLLoader();
+mtlLoader.setPath( "../../models/taran/" );
+mtlLoader.load( 'taran.mtl', function( materials ) {
+	materials.preload();
+	var objLoader = new THREE.OBJLoader();
+	objLoader.setMaterials( materials );
+	objLoader.setPath( "../../models/taran/" );
+	objLoader.load( 'taran.obj', function ( object ) {
+		loadedModelsCount += 1;
+		taran = object;
+		taran.position.x = 0;
+		taran.position.y = -3;
+		taran.position.z = 0;
+		taran.rotation.y = -1.3;
+		taran.rotation.z = 0.5;
+		taran.rotation.x = 0.6;
+		taran.name = 'taran';
+		// scene.add( taran );
+		// scene.remove( taran );
 	} );
 } );
 
@@ -166,13 +197,15 @@ mtlLoader.load( 'friz_met_trig.mtl', function( materials ) {
 	objLoader.setMaterials( materials );
 	objLoader.setPath( "../../models/friz/" );
 	objLoader.load( 'friz_met_trig.obj', function ( object ) {
-	friz = object;
-	friz.position.x = 0;
-	friz.position.y = 0;
-	friz.position.z = 0;
-	// friz.rotation.y = 3;
-	friz.name = 'friz';
-	// scene.add( klinopis );
+		loadedModelsCount += 1;
+		friz = object;
+		friz.position.x = 0;
+		friz.position.y = 0;
+		friz.position.z = 10;
+		// friz.rotation.y = -1;
+		friz.name = 'friz';
+		// scene.add( friz );
+		// scene.remove( friz );
 	} );
 } );
 
@@ -184,6 +217,19 @@ darkCube.position.x = 0;
 darkCube.position.y = 0;
 darkCube.position.z = 0;
 darkCube.name = 'dark cube';
+
+var $loadedModelsCount = document.getElementById('loadedModelsCount');
+var $modelsLoader = document.getElementById('models-loader');
+scene.add(darkCube);
+var loadingInterval = setInterval(() => {
+	console.log('loaded: ', loadedModelsCount);
+	$loadedModelsCount.innerHTML = loadedModelsCount;
+	if (loadedModelsCount >= 5) {
+		clearInterval(loadingInterval);
+		$modelsLoader.style.display = 'none';
+		scene.remove(darkCube);
+	}
+}, 500);
 
 var x = -25, y = -20;
 var klinopisShape = new THREE.Shape();
@@ -302,7 +348,8 @@ function onDocumentMouseDown( event, typeOfAction ) {
 			scene.remove(frizCube);
 			scene.remove(mitridatCube);
 			scene.remove(klinopisAreaMesh);
-			
+			scene.remove(shipAreaMesh);
+			scene.remove(taranAreaMesh);
 
 			mitridat.position.x = 0;
 			mitridat.position.y = 0;
@@ -318,10 +365,11 @@ function onDocumentMouseDown( event, typeOfAction ) {
 			scene.remove(mitridatCube);
 			scene.remove(klinopisAreaMesh);
 			scene.remove(shipAreaMesh);
+			scene.remove(taranAreaMesh);
 		}
 		if (INTERSECTED.name === 'friz area') {
 			openedModel = 'friz';
-			zDelta = 4;
+			zDelta = 8;
 			camera.translateZ(zDelta);
 			scene.add(darkCube);
 			scene.add(friz);
@@ -329,6 +377,7 @@ function onDocumentMouseDown( event, typeOfAction ) {
 			scene.remove(mitridatCube);
 			scene.remove(klinopisAreaMesh);
 			scene.remove(shipAreaMesh);
+			scene.remove(taranAreaMesh);
 		}
 		if (INTERSECTED.name === 'ship area') {
 			openedModel = 'ship';
@@ -340,6 +389,19 @@ function onDocumentMouseDown( event, typeOfAction ) {
 			scene.remove(mitridatCube);
 			scene.remove(klinopisAreaMesh);
 			scene.remove(shipAreaMesh);
+			scene.remove(taranAreaMesh);
+		}
+		if (INTERSECTED.name === 'taran area') {
+			openedModel = 'taran';
+			zDelta = 12;
+			camera.translateZ(zDelta);
+			scene.add(darkCube);
+			scene.add(taran);
+			scene.remove(frizCube);
+			scene.remove(mitridatCube);
+			scene.remove(klinopisAreaMesh);
+			scene.remove(shipAreaMesh);
+			scene.remove(taranAreaMesh);
 		}
 		if (INTERSECTED.name === 'dark cube' && typeOfAction === 'close model') {
 			scene.remove(darkCube);
@@ -347,10 +409,12 @@ function onDocumentMouseDown( event, typeOfAction ) {
 			scene.remove(klinopis);
 			scene.remove(friz);
 			scene.remove(ship);
+			scene.remove(taran);
 			scene.add(shipAreaMesh);
 			scene.add(mitridatCube);
 			scene.add(frizCube);
 			scene.add(klinopisAreaMesh);
+			scene.add(taranAreaMesh);
 			camera.translateZ(-zDelta);
 		}
 		// INTERSECTED.position.z += 1;

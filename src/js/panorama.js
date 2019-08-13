@@ -5,7 +5,7 @@ var scene = new THREE.Scene();
 scene.add( new THREE.AmbientLight( 0xffffff, 1.2 ) );
 
 var renderer = new THREE.WebGLRenderer();
-renderer.setSize( window.innerWidth, window.innerHeight, false );
+renderer.setSize( window.innerWidth, window.innerHeight );
 // renderer.setClearColor( 0xffffff, 1);
 var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 camera.position.z = 0;
@@ -255,7 +255,7 @@ shipShape.lineTo( x+4, y+4.5 );
 shipShape.lineTo( x-11, y+4 );
 shipShape.lineTo( x-11, y-1.3 );
 var shipAreaGeometry = new THREE.ShapeGeometry( shipShape );
-var shipAreaMaterial = new THREE.MeshBasicMaterial( { color: 0x0000ff, opacity: 0.3, transparent: true } );
+var shipAreaMaterial = new THREE.MeshBasicMaterial( { color: 0xff0000, opacity: 0.4, transparent: true } );
 var shipAreaMesh = new THREE.Mesh( shipAreaGeometry, shipAreaMaterial ) ;
 shipAreaMesh.position.x = 49;
 shipAreaMesh.position.y = -8;

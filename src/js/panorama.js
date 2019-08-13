@@ -1,6 +1,8 @@
+import { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } from "constants";
+
 // Our Javascript will go here.
 var scene = new THREE.Scene();
-scene.add( new THREE.AmbientLight( 0xffffff, 1 ) );
+scene.add( new THREE.AmbientLight( 0xffffff, 1.2 ) );
 
 var renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight, false );
@@ -62,7 +64,7 @@ for ( var i = 0, l = positions.length / 3; i < l; i ++ ) {
 }
 
 var mesh = new THREE.Mesh( geometry, material );
-meshBox = new THREE.Mesh( geometry, material );
+var meshBox = new THREE.Mesh( geometry, material );
 scene.add( meshBox );
 
 var cameraY = 0, cameraZ = 0;
@@ -98,8 +100,6 @@ animate();
 // } );
 
 var mitridat = null;
-var mesh = null;
-
 var mtlLoader = new THREE.MTLLoader();
 mtlLoader.setPath( "../../models/mitridat/" );
 mtlLoader.load( 'Mitridat.mtl', function( materials ) {
@@ -113,20 +113,137 @@ mtlLoader.load( 'Mitridat.mtl', function( materials ) {
 	mitridat.position.y = -2.9;
 	mitridat.position.z = 2.9;
 	mitridat.rotation.y = -1.2;
-	scene.add( object );
+	// scene.add( object );
 	} );
 } );
 
-var darkCubeGeometry = new THREE.BoxBufferGeometry(10,10,10, 80, 10, 80);
+var klinopis = null;
+var mtlLoader = new THREE.MTLLoader();
+mtlLoader.setPath( "../../models/klinopis/" );
+mtlLoader.load( 'klinopis.mtl', function( materials ) {
+	materials.preload();
+	var objLoader = new THREE.OBJLoader();
+	objLoader.setMaterials( materials );
+	objLoader.setPath( "../../models/klinopis/" );
+	objLoader.load( 'klinopis.obj', function ( object ) {
+	klinopis = object;
+	klinopis.position.x = 0;
+	klinopis.position.y = 0;
+	klinopis.position.z = 0;
+	klinopis.rotation.y = 3;
+	klinopis.name = 'klinopis';
+	// scene.add( klinopis );
+	} );
+} );
+
+var ship = null;
+var mtlLoader = new THREE.MTLLoader();
+mtlLoader.setPath( "../../models/ship/" );
+mtlLoader.load( 'ship200k_1.mtl', function( materials ) {
+	materials.preload();
+	var objLoader = new THREE.OBJLoader();
+	objLoader.setMaterials( materials );
+	objLoader.setPath( "../../models/ship/" );
+	objLoader.load( 'ship200k_1.obj', function ( object ) {
+	ship = object;
+	ship.position.x = 0;
+	ship.position.y = 0;
+	ship.position.z = 0;
+	ship.rotation.y = -1.3;
+	ship.rotation.z = 0.5;
+	ship.rotation.x = 0.6;
+	ship.name = 'ship';
+	// scene.add( klinopis );
+	} );
+} );
+
+var friz = null;
+var mtlLoader = new THREE.MTLLoader();
+mtlLoader.setPath( "../../models/friz/" );
+mtlLoader.load( 'friz_met_trig.mtl', function( materials ) {
+	materials.preload();
+	var objLoader = new THREE.OBJLoader();
+	objLoader.setMaterials( materials );
+	objLoader.setPath( "../../models/friz/" );
+	objLoader.load( 'friz_met_trig.obj', function ( object ) {
+	friz = object;
+	friz.position.x = 0;
+	friz.position.y = 0;
+	friz.position.z = 0;
+	// friz.rotation.y = 3;
+	friz.name = 'friz';
+	// scene.add( klinopis );
+	} );
+} );
+
+var darkCubeGeometry = new THREE.BoxGeometry(49,49,49);
 darkCubeGeometry.scale( - 1, 1, 1 );
 var darkCubeMaterial = new THREE.MeshLambertMaterial({color: 0x000000, wireframe: false, opacity: 0.6, transparent: true});  
 var darkCube = new THREE.Mesh(darkCubeGeometry, darkCubeMaterial);
 darkCube.position.x = 0;
 darkCube.position.y = 0;
 darkCube.position.z = 0;
-// darkCube.rotation.y = 0.5;
 darkCube.name = 'dark cube';
-// scene.add( darkCube );
+
+var x = -25, y = -20;
+var klinopisShape = new THREE.Shape();
+klinopisShape.moveTo( x+3, y );
+klinopisShape.lineTo( x + 3.4, y + 2.8 );
+klinopisShape.lineTo( x + 1.8, y + 4.7 );
+klinopisShape.lineTo( x-3.3, y + 4.7 );
+klinopisShape.lineTo( x-3.6, y );
+klinopisShape.lineTo( x-3, y-0.3 );
+var klinopisAreaGeometry = new THREE.ShapeGeometry( klinopisShape );
+var klinopisAreaMaterial = new THREE.MeshBasicMaterial( { color: 0x00ff00, opacity: 0.3, transparent: true } );
+var klinopisAreaMesh = new THREE.Mesh( klinopisAreaGeometry, klinopisAreaMaterial ) ;
+klinopisAreaMesh.position.x = 10;
+klinopisAreaMesh.position.y = 0;
+klinopisAreaMesh.position.z = -49;
+klinopisAreaMesh.name = 'klinopis area';
+scene.add( klinopisAreaMesh );
+
+x = 0, y = 0;
+var shipShape = new THREE.Shape();
+shipShape.moveTo( x+4, y-0.5 );
+shipShape.lineTo( x+4, y+4.5 );
+shipShape.lineTo( x-11, y+4 );
+shipShape.lineTo( x-11, y-1.3 );
+var shipAreaGeometry = new THREE.ShapeGeometry( shipShape );
+var shipAreaMaterial = new THREE.MeshBasicMaterial( { color: 0x0000ff, opacity: 0.3, transparent: true } );
+var shipAreaMesh = new THREE.Mesh( shipAreaGeometry, shipAreaMaterial ) ;
+shipAreaMesh.position.x = 49;
+shipAreaMesh.position.y = -8;
+shipAreaMesh.position.z = -10;
+shipAreaMesh.rotation.y = -1.5;
+shipAreaMesh.name = 'ship area';
+scene.add( shipAreaMesh );
+
+x = 0, y = -5;
+var taranShape = new THREE.Shape();
+taranShape.moveTo( x+5.2, y-0.5 );
+taranShape.lineTo( x+5.4, y+1 );
+taranShape.lineTo( x+3, y+1 );
+taranShape.lineTo( x, y+1.5 );
+taranShape.lineTo( x-3, y+2.7 );
+taranShape.lineTo( x-6, y+5.5 );
+taranShape.lineTo( x-6.8, y+7.5 );
+taranShape.lineTo( x-7.6, y+7.4 );
+taranShape.lineTo( x-7, y+5.5 );
+taranShape.lineTo( x-5, y+3 );
+taranShape.lineTo( x-3.8, y+1.8 );
+taranShape.lineTo( x-4.2, y+1.2 );
+taranShape.lineTo( x-4, y+0.5 );
+taranShape.lineTo( x-11.3, y+0.2 );
+taranShape.lineTo( x-11.5, y-1.4 );
+var taranAreaGeometry = new THREE.ShapeGeometry( taranShape );
+var taranAreaMaterial = new THREE.MeshBasicMaterial( { color: 0x00ff00, opacity: 0.3, transparent: true } );
+var taranAreaMesh = new THREE.Mesh( taranAreaGeometry, taranAreaMaterial ) ;
+taranAreaMesh.position.x = 48;
+taranAreaMesh.position.y = -8;
+taranAreaMesh.position.z = -10;
+taranAreaMesh.rotation.y = -1.5;
+taranAreaMesh.name = 'taran area';
+scene.add( taranAreaMesh );
 
 var mitridatCubeGeometry = new THREE.BoxGeometry(1,2.3,2);
 var mitridatCubeMaterial = new THREE.MeshLambertMaterial({color: 0x00ff00, wireframe: false, opacity: 0.3, transparent: true});  
@@ -138,8 +255,17 @@ mitridatCube.rotation.y = 0.5;
 mitridatCube.name = 'mitridat area';
 scene.add( mitridatCube );
 
-// camera.updateMatrixWorld();
-// camera.updateProjectionMatrix();
+var frizCubeGeometry = new THREE.BoxGeometry(2.2,3,7);
+var frizCubeMaterial = new THREE.MeshLambertMaterial({color: 0x00ff00, wireframe: false, opacity: 0.3, transparent: true});  
+var frizCube = new THREE.Mesh(frizCubeGeometry, frizCubeMaterial);
+frizCube.position.x = 28;
+frizCube.position.y = -10;
+frizCube.position.z = 15;
+frizCube.rotation.y = 0.4;
+frizCube.rotation.z = -1.3;
+frizCube.name = 'friz area';
+scene.add( frizCube );
+
 // Clicking
 var mouse = new THREE.Vector2(), INTERSECTED;
 var raycaster = new THREE.Raycaster();
@@ -154,38 +280,78 @@ document.addEventListener( 'mouseup', (e) => {
 	}
 }, false);
 
+var zDelta = 0;
 var openedModel = null;
 document.addEventListener( 'click', onDocumentMouseDown, false );
 function onDocumentMouseDown( event, typeOfAction ) {
     event.preventDefault();
     mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-    mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
-    // find intersections
+	mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+	// console.log(mouse.x, mouse.y);
+    
     raycaster.setFromCamera( mouse, camera );
 	var intersects = raycaster.intersectObjects( scene.children );
-	// console.log(intersects[0]);
     if ( intersects.length > 0 ) {
-    //   if ( INTERSECTED != intersects[ 0 ].object ) {
-        // if ( INTERSECTED ) INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
         INTERSECTED = intersects[ 0 ].object;
-        // INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
-		// INTERSECTED.material.emissive.setHex( 0xff0000 );
 		if (INTERSECTED.name === 'mitridat area') {
 			openedModel = 'mitridat';
-			camera.translateZ(2);
+			zDelta = 2;
+			camera.translateZ(zDelta);
 			scene.add(darkCube);
+			scene.add(mitridat);
+			scene.remove(frizCube);
 			scene.remove(mitridatCube);
-			// console.log(cameraY, cameraZ);
-			// camera.position.y = cameraY;
-			// camera.position.z = cameraZ;
+			scene.remove(klinopisAreaMesh);
+			
+
 			mitridat.position.x = 0;
 			mitridat.position.y = 0;
 			mitridat.position.z = 0;
 		}
+		if (INTERSECTED.name === 'klinopis area') {
+			openedModel = 'klinopis';
+			zDelta = 4;
+			camera.translateZ(zDelta);
+			scene.add(darkCube);
+			scene.add(klinopis);
+			scene.remove(frizCube);
+			scene.remove(mitridatCube);
+			scene.remove(klinopisAreaMesh);
+			scene.remove(shipAreaMesh);
+		}
+		if (INTERSECTED.name === 'friz area') {
+			openedModel = 'friz';
+			zDelta = 4;
+			camera.translateZ(zDelta);
+			scene.add(darkCube);
+			scene.add(friz);
+			scene.remove(frizCube);
+			scene.remove(mitridatCube);
+			scene.remove(klinopisAreaMesh);
+			scene.remove(shipAreaMesh);
+		}
+		if (INTERSECTED.name === 'ship area') {
+			openedModel = 'ship';
+			zDelta = 8;
+			camera.translateZ(zDelta);
+			scene.add(darkCube);
+			scene.add(ship);
+			scene.remove(frizCube);
+			scene.remove(mitridatCube);
+			scene.remove(klinopisAreaMesh);
+			scene.remove(shipAreaMesh);
+		}
 		if (INTERSECTED.name === 'dark cube' && typeOfAction === 'close model') {
 			scene.remove(darkCube);
+			scene.remove(mitridat);
+			scene.remove(klinopis);
+			scene.remove(friz);
+			scene.remove(ship);
+			scene.add(shipAreaMesh);
 			scene.add(mitridatCube);
-			camera.translateZ(-2);
+			scene.add(frizCube);
+			scene.add(klinopisAreaMesh);
+			camera.translateZ(-zDelta);
 		}
 		// INTERSECTED.position.z += 1;
 		//  console.log(INTERSECTED.position.z);

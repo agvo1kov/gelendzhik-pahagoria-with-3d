@@ -124,8 +124,6 @@ mtlLoader.load( 'Mitridat.mtl', function( materials ) {
 		mitridat.position.y = -2.9;
 		mitridat.position.z = 2.9;
 		mitridat.rotation.y = -1.2;
-		// scene.add( mitridat );
-		// scene.remove( mitridat );
 	} );
 } );
 

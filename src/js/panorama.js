@@ -34,7 +34,7 @@ document.body.appendChild( renderer.domElement );
 var cube_width = 100;
 var geometry = new THREE.BoxBufferGeometry( cube_width, cube_width, cube_width, 80, 10, 80 ).toNonIndexed();
 geometry.scale( - 1, 1, 1 );
-var material = new THREE.MeshBasicMaterial( { map: new THREE.TextureLoader().load( '../../models/panorama.min.jpg' )} );
+var material = new THREE.MeshBasicMaterial( { map: new THREE.TextureLoader().load( '../../phanagor/virtual_exhibition/models/panorama.min.jpg' )} );
 var positions = geometry.attributes.position.array;
 var uvs = geometry.attributes.uv.array;
 var r = cube_width/2;
@@ -88,14 +88,14 @@ animate();
 // var mesh = null;
 
 // var mtlLoader = new THREE.MTLLoader();
-// mtlLoader.setPath( "../../models/ship/" );
+// mtlLoader.setPath( "../../phanagor/virtual_exhibition/models/ship/" );
 // mtlLoader.load( 'ship200k_1.mtl', function( materials ) {
 
 //   materials.preload();
 
 //   var objLoader = new THREE.OBJLoader();
 //   objLoader.setMaterials( materials );
-//   objLoader.setPath( "../../models/ship/" );
+//   objLoader.setPath( "../../phanagor/virtual_exhibition/models/ship/" );
 //   objLoader.load( 'ship200k_1.obj', function ( object ) {
 
 //     mesh = object;
@@ -111,13 +111,13 @@ var loadedModelsCount = 0;
 
 var mitridat = null;
 var mtlLoader = new THREE.MTLLoader();
-mtlLoader.setPath( "../../models/mitridat/" );
+mtlLoader.setPath( "../../phanagor/virtual_exhibition/models/mitridat/" );
 mtlLoader.load( 'Mitridat.mtl', function( materials ) {
 	materials.preload();
 	var objLoader = new THREE.OBJLoader();
 		loadedModelsCount += 1;
 		objLoader.setMaterials( materials );
-		objLoader.setPath( "../../models/mitridat/" );
+		objLoader.setPath( "../../phanagor/virtual_exhibition/models/mitridat/" );
 		objLoader.load( 'Mitridat.obj', function ( object ) {
 		mitridat = object;
 		mitridat.position.x = 18;
@@ -131,12 +131,12 @@ mtlLoader.load( 'Mitridat.mtl', function( materials ) {
 
 var klinopis = null;
 var mtlLoader = new THREE.MTLLoader();
-mtlLoader.setPath( "../../models/klinopis/" );
+mtlLoader.setPath( "../../phanagor/virtual_exhibition/models/klinopis/" );
 mtlLoader.load( 'klinopis.mtl', function( materials ) {
 	materials.preload();
 	var objLoader = new THREE.OBJLoader();
 	objLoader.setMaterials( materials );
-	objLoader.setPath( "../../models/klinopis/" );
+	objLoader.setPath( "../../phanagor/virtual_exhibition/models/klinopis/" );
 	objLoader.load( 'klinopis.obj', function ( object ) {
 		loadedModelsCount += 1;
 		klinopis = object;
@@ -152,12 +152,12 @@ mtlLoader.load( 'klinopis.mtl', function( materials ) {
 
 var ship = null;
 var mtlLoader = new THREE.MTLLoader();
-mtlLoader.setPath( "../../models/ship/" );
+mtlLoader.setPath( "../../phanagor/virtual_exhibition/models/ship/" );
 mtlLoader.load( 'ship200k_1.mtl', function( materials ) {
 	materials.preload();
 	var objLoader = new THREE.OBJLoader();
 	objLoader.setMaterials( materials );
-	objLoader.setPath( "../../models/ship/" );
+	objLoader.setPath( "../../phanagor/virtual_exhibition/models/ship/" );
 	objLoader.load( 'ship200k_1.obj', function ( object ) {
 		loadedModelsCount += 1;
 		ship = object;
@@ -175,12 +175,12 @@ mtlLoader.load( 'ship200k_1.mtl', function( materials ) {
 
 var taran = null;
 var mtlLoader = new THREE.MTLLoader();
-mtlLoader.setPath( "../../models/taran/" );
+mtlLoader.setPath( "../../phanagor/virtual_exhibition/models/taran/" );
 mtlLoader.load( 'taran.mtl', function( materials ) {
 	materials.preload();
 	var objLoader = new THREE.OBJLoader();
 	objLoader.setMaterials( materials );
-	objLoader.setPath( "../../models/taran/" );
+	objLoader.setPath( "../../phanagor/virtual_exhibition/models/taran/" );
 	objLoader.load( 'taran.obj', function ( object ) {
 		loadedModelsCount += 1;
 		taran = object;
@@ -198,12 +198,12 @@ mtlLoader.load( 'taran.mtl', function( materials ) {
 
 var friz = null;
 var mtlLoader = new THREE.MTLLoader();
-mtlLoader.setPath( "../../models/friz/" );
+mtlLoader.setPath( "../../phanagor/virtual_exhibition/models/friz/" );
 mtlLoader.load( 'friz_met_trig.mtl', function( materials ) {
 	materials.preload();
 	var objLoader = new THREE.OBJLoader();
 	objLoader.setMaterials( materials );
-	objLoader.setPath( "../../models/friz/" );
+	objLoader.setPath( "../../phanagor/virtual_exhibition/models/friz/" );
 	objLoader.load( 'friz_met_trig.obj', function ( object ) {
 		loadedModelsCount += 1;
 		friz = object;
@@ -324,24 +324,46 @@ scene.add( frizCube );
 var mouse = new THREE.Vector2(), INTERSECTED;
 var raycaster = new THREE.Raycaster();
 var startMouseDownTime = 0;
-document.addEventListener( 'mousedown', () => {
-	startMouseDownTime = new Date().getTime();
+
+var firstTouch = null;
+document.addEventListener( 'touchstart', (e) => {
+	if (e.touches.length === 1) {
+		startMouseDownTime = new Date().getTime();
+		firstTouch = e;
+	} else {
+		startMouseDownTime = -10000;
+	}
 }, false);
-document.addEventListener( 'mouseup', (e) => {
+document.addEventListener( 'touchend', () => {
 	var mousePressDuration = new Date().getTime() - startMouseDownTime;
 	if (mousePressDuration < 300) {
-		onDocumentMouseDown(e, 'close model');
+		onDocumentMouseDown(firstTouch, 'close model');
+		firstTouch = null;
 	}
 }, false);
 
 var zDelta = 0;
 var openedModel = null;
-document.addEventListener( 'click', onDocumentMouseDown, false );
+// document.addEventListener( 'click', (e) => {
+// 	console.log('Click handled!');
+// 	onDocumentMouseDown(e);
+// }, false );
+document.addEventListener( 'touchstart', (e) => {
+	console.log('Touch handled!');
+	if (e.touches.length === 1) {
+		onDocumentMouseDown(e);
+	}
+}, false );
 function onDocumentMouseDown( event, typeOfAction ) {
-    event.preventDefault();
-    mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-	mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
-	// console.log(mouse.x, mouse.y);
+	// event.preventDefault();
+	mouse = {x: 0, y: 0};
+	// if (typeOfAction === 'close model') {
+		console.log(event);
+		var touch = event.targetTouches[0];
+		mouse.x = ( touch.pageX / window.innerWidth ) * 2 - 1;
+		mouse.y = - ( touch.pageY / window.innerHeight ) * 2 + 1;
+	// }
+	console.log('Touch handled!');
     
     raycaster.setFromCamera( mouse, camera );
 	var intersects = raycaster.intersectObjects( scene.children );
@@ -435,17 +457,36 @@ function onDocumentMouseDown( event, typeOfAction ) {
     }
   }
 
+  var scale = 1, last_scale = 1, first_scale = 1;
+  var hammertime = new Hammer(document, {});
+  hammertime.get('pinch').set({ enable: true });
+  hammertime.on('pinch pinchend pinchstart', function(ev) {
+	if(ev.type == "pinchstart") {
+		first_scale = ev.scale;
+	}
+	if(ev.type == "pinchend") {
+		last_scale = scale;
+	} else {
+		var fovMAX = 80;
+		var fovMIN = 1;
 
-  function onDocumentMouseWheel( event ) {
-	console.log('heeey');
-    var fovMAX = 80;
-    var fovMIN = 1;
+		camera.fov = fovMAX - last_scale * ev.scale;
+		console.log(last_scale, first_scale, ev.scale, first_scale - ev.scale);
+		camera.fov = scale = Math.max( Math.min( camera.fov, fovMAX ), fovMIN );
+		// camera.projectionMatrix = new THREE.Matrix4().makePerspective(camera.fov, window.innerWidth / window.innerHeight, camera.near, camera.far);
+		camera.updateProjectionMatrix();
+	}
+  });
+//   function onDocumentMouseWheel( event ) {
+// 	console.log('heeey');
+//     var fovMAX = 80;
+//     var fovMIN = 1;
 
-    camera.fov -= event.wheelDeltaY * 0.05;
-    camera.fov = Math.max( Math.min( camera.fov, fovMAX ), fovMIN );
-	// camera.projectionMatrix = new THREE.Matrix4().makePerspective(camera.fov, window.innerWidth / window.innerHeight, camera.near, camera.far);
-	camera.updateProjectionMatrix();
+//     camera.fov -= event.wheelDeltaY * 0.05;
+//     camera.fov = Math.max( Math.min( camera.fov, fovMAX ), fovMIN );
+// 	// camera.projectionMatrix = new THREE.Matrix4().makePerspective(camera.fov, window.innerWidth / window.innerHeight, camera.near, camera.far);
+// 	camera.updateProjectionMatrix();
 
-}
+// }
 
-document.addEventListener( 'mousewheel', onDocumentMouseWheel, false );
+// document.addEventListener( 'mousewheel', onDocumentMouseWheel, false );

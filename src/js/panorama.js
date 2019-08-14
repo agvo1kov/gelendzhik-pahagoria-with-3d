@@ -16,12 +16,17 @@ camera.position.y = 0;
 camera.position.x = 0;
 var controls = new THREE.OrbitControls( camera, renderer.domElement );
 controls.target = new THREE.Vector3(.1, 0, 0);
-controls.mouseButtons = {
-	LEFT: THREE.MOUSE.ROTATE,
-	MIDDLE: THREE.MOUSE.ZOOM,
-	RIGHT: THREE.MOUSE.PAN
-};
-controls.zoomSpeed = 1;
+controls.noZoom = true;
+// controls.noKeys = true;
+controls.noPan = true;
+// controls.maxDistance = controls.minDistance = 0; 
+// controls.mouseButtons = {
+// 	LEFT: THREE.MOUSE.ROTATE,
+// 	MIDDLE: null,
+// 	RIGHT: THREE.MOUSE.PAN
+// };
+// controls.minDistance = 0;
+// controls.maxDistance = 20;
 controls.update();
 
 document.body.appendChild( renderer.domElement );
@@ -74,7 +79,7 @@ var cameraY = 0, cameraZ = 0;
 function animate() {
     requestAnimationFrame( animate );
     renderer.render( scene, camera );
-	controls.update();
+	// controls.update();
 	[cameraY, cameraZ] = [camera.position.y, camera.position.z];
 }
 animate();
@@ -429,3 +434,18 @@ function onDocumentMouseDown( event, typeOfAction ) {
       INTERSECTED = null;
     }
   }
+
+
+  function onDocumentMouseWheel( event ) {
+	console.log('heeey');
+    var fovMAX = 80;
+    var fovMIN = 1;
+
+    camera.fov -= event.wheelDeltaY * 0.05;
+    camera.fov = Math.max( Math.min( camera.fov, fovMAX ), fovMIN );
+	// camera.projectionMatrix = new THREE.Matrix4().makePerspective(camera.fov, window.innerWidth / window.innerHeight, camera.near, camera.far);
+	camera.updateProjectionMatrix();
+
+}
+
+document.addEventListener( 'mousewheel', onDocumentMouseWheel, false );

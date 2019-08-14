@@ -327,11 +327,7 @@ var startMouseDownTime = 0;
 
 var firstTouch = null;
 document.addEventListener( 'touchstart', (e) => {
-	let intersected = null;
 	if (e.touches.length === 1) {
-		intersected = onDocumentMouseDown(e);
-	}
-	if (e.touches.length === 1 && intersected.name === 'dark cube') {
 		startMouseDownTime = new Date().getTime();
 		firstTouch = e;
 	} else {
@@ -352,7 +348,12 @@ var openedModel = null;
 // 	console.log('Click handled!');
 // 	onDocumentMouseDown(e);
 // }, false );
-
+document.addEventListener( 'touchstart', (e) => {
+	console.log('Touch handled!');
+	if (e.touches.length === 1) {
+		onDocumentMouseDown(e);
+	}
+}, false );
 function onDocumentMouseDown( event, typeOfAction ) {
 	// event.preventDefault();
 	mouse = {x: 0, y: 0};
@@ -452,9 +453,8 @@ function onDocumentMouseDown( event, typeOfAction ) {
     //   }
     } else {
       if ( INTERSECTED ) INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
-	  INTERSECTED = null;
-	}
-	return INTERSECTED;
+      INTERSECTED = null;
+    }
   }
 
   var scale = 70, last_scale = 70, first_scale = 70;

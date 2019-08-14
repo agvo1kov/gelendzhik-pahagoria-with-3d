@@ -8,6 +8,9 @@ var renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
 // renderer.setClearColor( 0xffffff, 1);
 var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+window.addEventListener('resize', () => {
+	renderer.setSize( window.innerWidth, window.innerHeight );
+});
 camera.position.z = 0;
 camera.position.y = 0;
 camera.position.x = 0;

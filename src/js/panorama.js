@@ -26,7 +26,7 @@ document.body.appendChild( renderer.domElement );
 var cube_width = 100;
 var geometry = new THREE.BoxBufferGeometry( cube_width, cube_width, cube_width, 80, 10, 80 ).toNonIndexed();
 geometry.scale( - 1, 1, 1 );
-var material = new THREE.MeshBasicMaterial( { map: new THREE.TextureLoader().load( '../models/panorama.min.jpg' )} );
+var material = new THREE.MeshBasicMaterial( { map: new THREE.TextureLoader().load( 'https://agvo1kov.github.io/gelendzhik-pahagoria-with-3d/models/panorama.min.jpg' )} );
 var positions = geometry.attributes.position.array;
 var uvs = geometry.attributes.uv.array;
 var r = cube_width/2;
@@ -80,14 +80,14 @@ animate();
 // var mesh = null;
 
 // var mtlLoader = new THREE.MTLLoader();
-// mtlLoader.setPath( "../models/ship/" );
+// mtlLoader.setPath( "https://agvo1kov.github.io/gelendzhik-pahagoria-with-3d/models/ship/" );
 // mtlLoader.load( 'ship200k_1.mtl', function( materials ) {
 
 //   materials.preload();
 
 //   var objLoader = new THREE.OBJLoader();
 //   objLoader.setMaterials( materials );
-//   objLoader.setPath( "../models/ship/" );
+//   objLoader.setPath( "https://agvo1kov.github.io/gelendzhik-pahagoria-with-3d/models/ship/" );
 //   objLoader.load( 'ship200k_1.obj', function ( object ) {
 
 //     mesh = object;
@@ -103,13 +103,13 @@ var loadedModelsCount = 0;
 
 var mitridat = null;
 var mtlLoader = new THREE.MTLLoader();
-mtlLoader.setPath( "../models/mitridat/" );
+mtlLoader.setPath( "https://agvo1kov.github.io/gelendzhik-pahagoria-with-3d/models/mitridat/" );
 mtlLoader.load( 'Mitridat.mtl', function( materials ) {
 	materials.preload();
 	var objLoader = new THREE.OBJLoader();
 		loadedModelsCount += 1;
 		objLoader.setMaterials( materials );
-		objLoader.setPath( "../models/mitridat/" );
+		objLoader.setPath( "https://agvo1kov.github.io/gelendzhik-pahagoria-with-3d/models/mitridat/" );
 		objLoader.load( 'Mitridat.obj', function ( object ) {
 		mitridat = object;
 		mitridat.position.x = 18;
@@ -123,12 +123,12 @@ mtlLoader.load( 'Mitridat.mtl', function( materials ) {
 
 var klinopis = null;
 var mtlLoader = new THREE.MTLLoader();
-mtlLoader.setPath( "../models/klinopis/" );
+mtlLoader.setPath( "https://agvo1kov.github.io/gelendzhik-pahagoria-with-3d/models/klinopis/" );
 mtlLoader.load( 'klinopis.mtl', function( materials ) {
 	materials.preload();
 	var objLoader = new THREE.OBJLoader();
 	objLoader.setMaterials( materials );
-	objLoader.setPath( "../models/klinopis/" );
+	objLoader.setPath( "https://agvo1kov.github.io/gelendzhik-pahagoria-with-3d/models/klinopis/" );
 	objLoader.load( 'klinopis.obj', function ( object ) {
 		loadedModelsCount += 1;
 		klinopis = object;
@@ -144,12 +144,12 @@ mtlLoader.load( 'klinopis.mtl', function( materials ) {
 
 var ship = null;
 var mtlLoader = new THREE.MTLLoader();
-mtlLoader.setPath( "../models/ship/" );
+mtlLoader.setPath( "https://agvo1kov.github.io/gelendzhik-pahagoria-with-3d/models/ship/" );
 mtlLoader.load( 'ship200k_1.mtl', function( materials ) {
 	materials.preload();
 	var objLoader = new THREE.OBJLoader();
 	objLoader.setMaterials( materials );
-	objLoader.setPath( "../models/ship/" );
+	objLoader.setPath( "https://agvo1kov.github.io/gelendzhik-pahagoria-with-3d/models/ship/" );
 	objLoader.load( 'ship200k_1.obj', function ( object ) {
 		loadedModelsCount += 1;
 		ship = object;
@@ -167,12 +167,12 @@ mtlLoader.load( 'ship200k_1.mtl', function( materials ) {
 
 var taran = null;
 var mtlLoader = new THREE.MTLLoader();
-mtlLoader.setPath( "../models/taran/" );
+mtlLoader.setPath( "https://agvo1kov.github.io/gelendzhik-pahagoria-with-3d/models/taran/" );
 mtlLoader.load( 'taran.mtl', function( materials ) {
 	materials.preload();
 	var objLoader = new THREE.OBJLoader();
 	objLoader.setMaterials( materials );
-	objLoader.setPath( "../models/taran/" );
+	objLoader.setPath( "https://agvo1kov.github.io/gelendzhik-pahagoria-with-3d/models/taran/" );
 	objLoader.load( 'taran.obj', function ( object ) {
 		loadedModelsCount += 1;
 		taran = object;
@@ -190,12 +190,12 @@ mtlLoader.load( 'taran.mtl', function( materials ) {
 
 var friz = null;
 var mtlLoader = new THREE.MTLLoader();
-mtlLoader.setPath( "../models/friz/" );
+mtlLoader.setPath( "https://agvo1kov.github.io/gelendzhik-pahagoria-with-3d/models/friz/" );
 mtlLoader.load( 'friz_met_trig.mtl', function( materials ) {
 	materials.preload();
 	var objLoader = new THREE.OBJLoader();
 	objLoader.setMaterials( materials );
-	objLoader.setPath( "../models/friz/" );
+	objLoader.setPath( "https://agvo1kov.github.io/gelendzhik-pahagoria-with-3d/models/friz/" );
 	objLoader.load( 'friz_met_trig.obj', function ( object ) {
 		loadedModelsCount += 1;
 		friz = object;

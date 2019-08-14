@@ -6,6 +6,9 @@ scene.add( new THREE.AmbientLight( 0xffffff, 1.2 ) );
 
 var renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
+window.addEventListener('resize', () => {
+	renderer.setSize( window.innerWidth, window.innerHeight );
+});
 // renderer.setClearColor( 0xffffff, 1);
 var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 camera.position.z = 0;
@@ -13,12 +16,17 @@ camera.position.y = 0;
 camera.position.x = 0;
 var controls = new THREE.OrbitControls( camera, renderer.domElement );
 controls.target = new THREE.Vector3(.1, 0, 0);
-controls.mouseButtons = {
-	LEFT: THREE.MOUSE.ROTATE,
-	MIDDLE: THREE.MOUSE.ZOOM,
-	RIGHT: THREE.MOUSE.PAN
-};
-controls.zoomSpeed = 1;
+controls.noZoom = true;
+// controls.noKeys = true;
+controls.noPan = true;
+// controls.maxDistance = controls.minDistance = 0; 
+// controls.mouseButtons = {
+// 	LEFT: THREE.MOUSE.ROTATE,
+// 	MIDDLE: null,
+// 	RIGHT: THREE.MOUSE.PAN
+// };
+// controls.minDistance = 0;
+// controls.maxDistance = 20;
 controls.update();
 
 document.body.appendChild( renderer.domElement );
@@ -71,7 +79,6 @@ var cameraY = 0, cameraZ = 0;
 function animate() {
     requestAnimationFrame( animate );
     renderer.render( scene, camera );
-	controls.update();
 	[cameraY, cameraZ] = [camera.position.y, camera.position.z];
 }
 animate();
@@ -331,7 +338,6 @@ function onDocumentMouseDown( event, typeOfAction ) {
     event.preventDefault();
     mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
 	mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
-	// console.log(mouse.x, mouse.y);
     
     raycaster.setFromCamera( mouse, camera );
 	var intersects = raycaster.intersectObjects( scene.children );
@@ -415,12 +421,20 @@ function onDocumentMouseDown( event, typeOfAction ) {
 			scene.add(taranAreaMesh);
 			camera.translateZ(-zDelta);
 		}
-		// INTERSECTED.position.z += 1;
-		//  console.log(INTERSECTED.position.z);
-         console.log(intersects.length);
-    //   }
     } else {
       if ( INTERSECTED ) INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
       INTERSECTED = null;
     }
   }
+
+  function onDocumentMouseWheel( event ) {
+    var fovMAX = 80;
+    var fovMIN = 1;
+
+    camera.fov -= event.wheelDeltaY * 0.05;
+    camera.fov = Math.max( Math.min( camera.fov, fovMAX ), fovMIN );
+	camera.updateProjectionMatrix();
+
+}
+
+document.addEventListener( 'mousewheel', onDocumentMouseWheel, false );

@@ -457,20 +457,22 @@ function onDocumentMouseDown( event, typeOfAction ) {
 	return INTERSECTED;
   }
 
-  var scale = 1, last_scale = 1, first_scale = 1;
+  var scale = 70, last_scale = 70, first_scale = 70;
   var hammertime = new Hammer(document, {});
   hammertime.get('pinch').set({ enable: true });
   hammertime.on('pinch pinchend pinchstart', function(ev) {
 	if(ev.type == "pinchstart") {
 		first_scale = ev.scale;
+		controls.enableRotate = false;
 	}
 	if(ev.type == "pinchend") {
 		last_scale = scale;
+		controls.enableRotate = true;
 	} else {
 		var fovMAX = 80;
 		var fovMIN = 1;
 
-		camera.fov = fovMAX - last_scale * ev.scale;
+		camera.fov = last_scale * (1/ev.scale);
 		console.log(last_scale, first_scale, ev.scale, first_scale - ev.scale);
 		camera.fov = scale = Math.max( Math.min( camera.fov, fovMAX ), fovMIN );
 		// camera.projectionMatrix = new THREE.Matrix4().makePerspective(camera.fov, window.innerWidth / window.innerHeight, camera.near, camera.far);

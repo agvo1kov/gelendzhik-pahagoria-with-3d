@@ -5,8 +5,16 @@
 		<title>Выставка Фанагории в Геленджике</title>
 		<style>
 			* { margin: 0; padding: 0; }
-			canvas { width: 100%; height: 100% }
+			body { background: #1e1e29; }
+			canvas {
+				z-index: 1;
+				position: fixed;
+				top: 0;
+				width: 100%;
+				height: 100%;
+			}
 			.models-loader {
+				z-index: 2;
 				position: absolute;
 				top: 0;
 				left: 0;

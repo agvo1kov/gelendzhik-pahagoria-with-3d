@@ -9,6 +9,8 @@ renderer.setSize( window.innerWidth, window.innerHeight );
 // renderer.setClearColor( 0xffffff, 1);
 var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 window.addEventListener('resize', () => {
+	camera.aspect = window.innerWidth / window.innerHeight;
+	camera.updateProjectionMatrix();
 	renderer.setSize( window.innerWidth, window.innerHeight );
 });
 camera.position.z = 0;
@@ -34,7 +36,7 @@ document.body.appendChild( renderer.domElement );
 var cube_width = 100;
 var geometry = new THREE.BoxBufferGeometry( cube_width, cube_width, cube_width, 80, 10, 80 ).toNonIndexed();
 geometry.scale( - 1, 1, 1 );
-var material = new THREE.MeshBasicMaterial( { map: new THREE.TextureLoader().load( '../../phanagor/virtual_exhibition/models/panorama.min.jpg' )} );
+var material = new THREE.MeshBasicMaterial( { map: new THREE.TextureLoader().load( '../../models/panorama.min.jpg' )} );
 var positions = geometry.attributes.position.array;
 var uvs = geometry.attributes.uv.array;
 var r = cube_width/2;
@@ -88,14 +90,14 @@ animate();
 // var mesh = null;
 
 // var mtlLoader = new THREE.MTLLoader();
-// mtlLoader.setPath( "../../phanagor/virtual_exhibition/models/ship/" );
+// mtlLoader.setPath( "../../models/ship/" );
 // mtlLoader.load( 'ship200k_1.mtl', function( materials ) {
 
 //   materials.preload();
 
 //   var objLoader = new THREE.OBJLoader();
 //   objLoader.setMaterials( materials );
-//   objLoader.setPath( "../../phanagor/virtual_exhibition/models/ship/" );
+//   objLoader.setPath( "../../models/ship/" );
 //   objLoader.load( 'ship200k_1.obj', function ( object ) {
 
 //     mesh = object;
@@ -111,13 +113,13 @@ var loadedModelsCount = 0;
 
 var mitridat = null;
 var mtlLoader = new THREE.MTLLoader();
-mtlLoader.setPath( "../../phanagor/virtual_exhibition/models/mitridat/" );
+mtlLoader.setPath( "../../models/mitridat/" );
 mtlLoader.load( 'Mitridat.mtl', function( materials ) {
 	materials.preload();
 	var objLoader = new THREE.OBJLoader();
 		loadedModelsCount += 1;
 		objLoader.setMaterials( materials );
-		objLoader.setPath( "../../phanagor/virtual_exhibition/models/mitridat/" );
+		objLoader.setPath( "../../models/mitridat/" );
 		objLoader.load( 'Mitridat.obj', function ( object ) {
 		mitridat = object;
 		mitridat.position.x = 18;
@@ -129,12 +131,12 @@ mtlLoader.load( 'Mitridat.mtl', function( materials ) {
 
 var klinopis = null;
 var mtlLoader = new THREE.MTLLoader();
-mtlLoader.setPath( "../../phanagor/virtual_exhibition/models/klinopis/" );
+mtlLoader.setPath( "../../models/klinopis/" );
 mtlLoader.load( 'klinopis.mtl', function( materials ) {
 	materials.preload();
 	var objLoader = new THREE.OBJLoader();
 	objLoader.setMaterials( materials );
-	objLoader.setPath( "../../phanagor/virtual_exhibition/models/klinopis/" );
+	objLoader.setPath( "../../models/klinopis/" );
 	objLoader.load( 'klinopis.obj', function ( object ) {
 		loadedModelsCount += 1;
 		klinopis = object;
@@ -150,12 +152,12 @@ mtlLoader.load( 'klinopis.mtl', function( materials ) {
 
 var ship = null;
 var mtlLoader = new THREE.MTLLoader();
-mtlLoader.setPath( "../../phanagor/virtual_exhibition/models/ship/" );
+mtlLoader.setPath( "../../models/ship/" );
 mtlLoader.load( 'ship200k_1.mtl', function( materials ) {
 	materials.preload();
 	var objLoader = new THREE.OBJLoader();
 	objLoader.setMaterials( materials );
-	objLoader.setPath( "../../phanagor/virtual_exhibition/models/ship/" );
+	objLoader.setPath( "../../models/ship/" );
 	objLoader.load( 'ship200k_1.obj', function ( object ) {
 		loadedModelsCount += 1;
 		ship = object;
@@ -173,12 +175,12 @@ mtlLoader.load( 'ship200k_1.mtl', function( materials ) {
 
 var taran = null;
 var mtlLoader = new THREE.MTLLoader();
-mtlLoader.setPath( "../../phanagor/virtual_exhibition/models/taran/" );
+mtlLoader.setPath( "../../models/taran/" );
 mtlLoader.load( 'taran.mtl', function( materials ) {
 	materials.preload();
 	var objLoader = new THREE.OBJLoader();
 	objLoader.setMaterials( materials );
-	objLoader.setPath( "../../phanagor/virtual_exhibition/models/taran/" );
+	objLoader.setPath( "../../models/taran/" );
 	objLoader.load( 'taran.obj', function ( object ) {
 		loadedModelsCount += 1;
 		taran = object;
@@ -196,12 +198,12 @@ mtlLoader.load( 'taran.mtl', function( materials ) {
 
 var friz = null;
 var mtlLoader = new THREE.MTLLoader();
-mtlLoader.setPath( "../../phanagor/virtual_exhibition/models/friz/" );
+mtlLoader.setPath( "../../models/friz/" );
 mtlLoader.load( 'friz_met_trig.mtl', function( materials ) {
 	materials.preload();
 	var objLoader = new THREE.OBJLoader();
 	objLoader.setMaterials( materials );
-	objLoader.setPath( "../../phanagor/virtual_exhibition/models/friz/" );
+	objLoader.setPath( "../../models/friz/" );
 	objLoader.load( 'friz_met_trig.obj', function ( object ) {
 		loadedModelsCount += 1;
 		friz = object;
@@ -324,15 +326,30 @@ var raycaster = new THREE.Raycaster();
 var startMouseDownTime = 0;
 
 var firstTouch = null;
-document.addEventListener( 'touchstart', (e) => {
-	if (e.touches.length === 1) {
+// document.addEventListener( 'touchstart', (e) => {
+// 	if (e.touches.length === 1) {
+// 		startMouseDownTime = new Date().getTime();
+// 		firstTouch = e;
+// 	} else {
+// 		startMouseDownTime = -10000;
+// 	}
+// }, false);
+// document.addEventListener( 'touchend', () => {
+// 	var mousePressDuration = new Date().getTime() - startMouseDownTime;
+// 	if (mousePressDuration < 300) {
+// 		onDocumentMouseDown(firstTouch, 'close model');
+// 		firstTouch = null;
+// 	}
+// }, false);
+document.addEventListener( 'mousedown', (e) => {
+	// if (e.touches.length === 1) {
 		startMouseDownTime = new Date().getTime();
 		firstTouch = e;
-	} else {
-		startMouseDownTime = -10000;
-	}
+	// } else {
+		// startMouseDownTime = -10000;
+	// }
 }, false);
-document.addEventListener( 'touchend', () => {
+document.addEventListener( 'mouseup', () => {
 	var mousePressDuration = new Date().getTime() - startMouseDownTime;
 	if (mousePressDuration < 300) {
 		onDocumentMouseDown(firstTouch, 'close model');
@@ -342,24 +359,24 @@ document.addEventListener( 'touchend', () => {
 
 var zDelta = 0;
 var openedModel = null;
-// document.addEventListener( 'click', (e) => {
-// 	console.log('Click handled!');
-// 	onDocumentMouseDown(e);
-// }, false );
-document.addEventListener( 'touchstart', (e) => {
-	console.log('Touch handled!');
-	if (e.touches.length === 1) {
-		onDocumentMouseDown(e);
-	}
+document.addEventListener( 'click', (e) => {
+	console.log('Click handled!');
+	onDocumentMouseDown(e);
 }, false );
+// document.addEventListener( 'touchstart', (e) => {
+// 	console.log('Touch handled!');
+// 	if (e.touches.length === 1) {
+// 		onDocumentMouseDown(e);
+// 	}
+// }, false );
 function onDocumentMouseDown( event, typeOfAction ) {
-	// event.preventDefault();
+	event.preventDefault();
 	mouse = {x: 0, y: 0};
 	// if (typeOfAction === 'close model') {
 		console.log(event);
-		var touch = event.targetTouches[0];
-		mouse.x = ( touch.pageX / window.innerWidth ) * 2 - 1;
-		mouse.y = - ( touch.pageY / window.innerHeight ) * 2 + 1;
+		// var touch = event.targetTouches[0];
+		mouse.x = ( event.pageX / window.innerWidth ) * 2 - 1;
+		mouse.y = - ( event.pageY / window.innerHeight ) * 2 + 1;
 	// }
 	console.log('Touch handled!');
     
@@ -455,38 +472,38 @@ function onDocumentMouseDown( event, typeOfAction ) {
     }
   }
 
-  var scale = 70, last_scale = 70, first_scale = 70;
-  var hammertime = new Hammer(document, {});
-  hammertime.get('pinch').set({ enable: true });
-  hammertime.on('pinch pinchend pinchstart', function(ev) {
-	if(ev.type == "pinchstart") {
-		first_scale = ev.scale;
-		controls.enableRotate = false;
-	}
-	if(ev.type == "pinchend") {
-		last_scale = scale;
-		controls.enableRotate = true;
-	} else {
-		var fovMAX = 80;
-		var fovMIN = 1;
+//   var scale = 70, last_scale = 70, first_scale = 70;
+//   var hammertime = new Hammer(document, {});
+//   hammertime.get('pinch').set({ enable: true });
+//   hammertime.on('pinch pinchend pinchstart', function(ev) {
+// 	if(ev.type == "pinchstart") {
+// 		first_scale = ev.scale;
+// 		controls.enableRotate = false;
+// 	}
+// 	if(ev.type == "pinchend") {
+// 		last_scale = scale;
+// 		controls.enableRotate = true;
+// 	} else {
+// 		var fovMAX = 80;
+// 		var fovMIN = 1;
 
-		camera.fov = last_scale * (1/ev.scale);
-		console.log(last_scale, first_scale, ev.scale, first_scale - ev.scale);
-		camera.fov = scale = Math.max( Math.min( camera.fov, fovMAX ), fovMIN );
-		// camera.projectionMatrix = new THREE.Matrix4().makePerspective(camera.fov, window.innerWidth / window.innerHeight, camera.near, camera.far);
-		camera.updateProjectionMatrix();
-	}
-  });
-//   function onDocumentMouseWheel( event ) {
-// 	console.log('heeey');
-//     var fovMAX = 80;
-//     var fovMIN = 1;
+// 		camera.fov = last_scale * (1/ev.scale);
+// 		console.log(last_scale, first_scale, ev.scale, first_scale - ev.scale);
+// 		camera.fov = scale = Math.max( Math.min( camera.fov, fovMAX ), fovMIN );
+// 		// camera.projectionMatrix = new THREE.Matrix4().makePerspective(camera.fov, window.innerWidth / window.innerHeight, camera.near, camera.far);
+// 		camera.updateProjectionMatrix();
+// 	}
+//   });
+  function onDocumentMouseWheel( event ) {
+	console.log('heeey');
+    var fovMAX = 80;
+    var fovMIN = 1;
 
-//     camera.fov -= event.wheelDeltaY * 0.05;
-//     camera.fov = Math.max( Math.min( camera.fov, fovMAX ), fovMIN );
-// 	// camera.projectionMatrix = new THREE.Matrix4().makePerspective(camera.fov, window.innerWidth / window.innerHeight, camera.near, camera.far);
-// 	camera.updateProjectionMatrix();
+    camera.fov -= event.wheelDeltaY * 0.05;
+    camera.fov = Math.max( Math.min( camera.fov, fovMAX ), fovMIN );
+	// camera.projectionMatrix = new THREE.Matrix4().makePerspective(camera.fov, window.innerWidth / window.innerHeight, camera.near, camera.far);
+	camera.updateProjectionMatrix();
 
-// }
+}
 
-// document.addEventListener( 'mousewheel', onDocumentMouseWheel, false );
+document.addEventListener( 'mousewheel', onDocumentMouseWheel, false );
